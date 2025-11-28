@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom small utilities */
+body {
+    transition: background-color 200ms;
+}
+
+.table-fixed td,
+.table-fixed th {
+    word-wrap: break-word;
+}
+
+.truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.truncate-1-line {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Card Layout */
+.job-grid {
+    display: grid;
+    grid-auto-rows: 1fr;
+}
+
+.job-card-full-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
