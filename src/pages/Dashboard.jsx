@@ -35,6 +35,9 @@ export default function Dashboard() {
         return saved !== null ? JSON.parse(saved) : true;
     });
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10; // 10 job per halaman
+
     const [searchQuery, setSearchQuery] = useState("");
     const [filter, setFilter] = useState("all");
     const [sortBy, setSortBy] = useState("newest");
@@ -169,6 +172,16 @@ export default function Dashboard() {
         );
     }
 
+    // Pagination
+    const totalItems = filteredJobs.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+    const safePage = Math.min(currentPage, totalPages);
+    const startIndex = (safePage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedJobs = filteredJobs.slice(startIndex, endIndex);
+
+
     // Hitung perlu follow-up
     const today = new Date();
     const needFollowUpCount = jobs.filter((j) => {
@@ -177,11 +190,16 @@ export default function Dashboard() {
         return f <= today && new Date(j.expires_at) >= today;
     }).length;
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, filter, sortBy, priorityFilter]);
+
+
     return (
         <div
             className={`min-h-screen transition-colors duration-300 ${darkMode
-                    ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
-                    : "bg-gradient-to-br from-gray-50 via-white to-gray-100"
+                ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+                : "bg-gradient-to-br from-gray-50 via-white to-gray-100"
                 }`}
         >
             <DocumentTitle title="Dashboard" />
@@ -261,8 +279,8 @@ export default function Dashboard() {
                                     value={priorityFilter}
                                     onChange={(e) => setPriorityFilter(e.target.value)}
                                     className={`px-3 py-1.5 rounded-lg text-xs border ${darkMode
-                                            ? "bg-gray-800 border-gray-700 text-gray-100"
-                                            : "bg-white border-gray-300 text-gray-800"
+                                        ? "bg-gray-800 border-gray-700 text-gray-100"
+                                        : "bg-white border-gray-300 text-gray-800"
                                         }`}
                                 >
                                     <option value="all">Semua</option>
@@ -277,7 +295,7 @@ export default function Dashboard() {
 
                 {/* Job Grid */}
                 <div className="job-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {filteredJobs.map((job) => {
+                    {paginatedJobs.map((job) => {
                         const expired = new Date(job.expires_at) < new Date();
                         return (
                             <JobCard
@@ -297,6 +315,65 @@ export default function Dashboard() {
                         );
                     })}
                 </div>
+
+                {/* Pagination */}
+                {totalItems > 0 && (
+                    <div className="mt-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
+                        <p
+                            className={
+                                darkMode ? "text-xs text-gray-400" : "text-xs text-gray-600"
+                            }
+                        >
+                            Menampilkan{" "}
+                            <span className="font-semibold">
+                                {startIndex + 1}-{Math.min(endIndex, totalItems)}
+                            </span>{" "}
+                            dari <span className="font-semibold">{totalItems}</span> lamaran
+                        </p>
+
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                disabled={safePage === 1}
+                                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${safePage === 1
+                                        ? "cursor-not-allowed opacity-40"
+                                        : darkMode
+                                            ? "bg-gray-800 text-gray-100 hover:bg-gray-700"
+                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                    }`}
+                            >
+                                Prev
+                            </button>
+
+                            <div
+                                className={
+                                    darkMode ? "text-xs text-gray-300" : "text-xs text-gray-700"
+                                }
+                            >
+                                Page{" "}
+                                <span className="font-semibold">
+                                    {safePage}/{totalPages}
+                                </span>
+                            </div>
+
+                            <button
+                                onClick={() =>
+                                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                                }
+                                disabled={safePage === totalPages}
+                                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${safePage === totalPages
+                                        ? "cursor-not-allowed opacity-40"
+                                        : darkMode
+                                            ? "bg-gray-800 text-gray-100 hover:bg-gray-700"
+                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                    }`}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                )}
+
 
                 {/* Empty state */}
                 {!jobsLoading && filteredJobs.length === 0 && (
