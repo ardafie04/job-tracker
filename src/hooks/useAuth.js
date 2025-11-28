@@ -2,9 +2,9 @@
 // hooks/useAuth.js
 // —————————————————————————————
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 
 export function useAuth() {
     const navigate = useNavigate();
@@ -83,13 +83,9 @@ export function useAuth() {
         setLoading(true);
 
         try {
-            const redirectTo = window.location.origin; // otomatis vercel / localhost
-
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
-                options: {
-                    redirectTo,
-                },
+                // Tidak pakai options.redirectTo -> Supabase pakai Site URL
             });
 
             if (error) throw error;
@@ -108,6 +104,6 @@ export function useAuth() {
         setError,
         loginWithEmail,
         registerWithEmail,
-        loginWithGoogle
+        loginWithGoogle,
     };
 }
