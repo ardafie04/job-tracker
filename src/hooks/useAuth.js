@@ -83,10 +83,12 @@ export function useAuth() {
         setLoading(true);
 
         try {
+            const redirectTo = window.location.origin; // otomatis vercel / localhost
+
             const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
+                provider: "google",
                 options: {
-                    redirectTo: `${window.location.origin}/dashboard`,
+                    redirectTo,
                 },
             });
 
