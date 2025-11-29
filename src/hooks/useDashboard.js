@@ -17,6 +17,23 @@ export function useDashboard() {
         }
     };
 
+    useEffect(() => {
+        // listen perubahan auth: SIGNED_OUT, TOKEN_REFRESHED, dll
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_OUT" || (!session && event === "TOKEN_REFRESHED")) {
+                // session benar-benar hilang / invalid
+                window.localStorage.removeItem("cachedUser");
+                window.location.href = "/"; // paksa balik ke halaman login
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+
     // ✅ Initial state langsung dari cache
     const cachedUser = getCachedUser();
     const [user, setUser] = useState(cachedUser);
@@ -31,7 +48,7 @@ export function useDashboard() {
             const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 
             if (authError || !authUser) {
-                localStorage.removeItem('cachedUser');
+                localStorage.removeItem("cachedUser");
                 window.location.href = "/";
                 return;
             }
