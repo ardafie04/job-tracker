@@ -83,7 +83,7 @@ export function useAuth() {
         setLoading(true);
 
         try {
-            const redirectTo = window.location.origin; // BUKAN base Supabase
+            const redirectTo = window.location.origin; // ini yang penting
 
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
@@ -91,6 +91,7 @@ export function useAuth() {
             });
 
             if (error) throw error;
+
             return { success: true };
         } catch (err) {
             setError(err.message || "Google login gagal");
@@ -98,6 +99,7 @@ export function useAuth() {
             return { success: false, error: err.message };
         }
     };
+
 
     return {
         loading,
