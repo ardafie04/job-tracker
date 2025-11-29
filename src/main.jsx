@@ -22,14 +22,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Bersihkan fragment token di URL setelah Supabase proses sesi
-    if (window.location.hash.includes("access_token")) {
-      const url = window.location.origin + window.location.pathname;
-      window.history.replaceState({}, "", url);
-    }
-  }, []);
-
-  useEffect(() => {
     // ✅ Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
