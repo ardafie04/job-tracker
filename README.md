@@ -3,7 +3,7 @@
 Job Tracker adalah aplikasi web untuk mencatat dan mengelola lamaran kerja agar lebih rapi, terstruktur, dan mudah dipantau.  
 Kamu bisa menyimpan semua informasi lowongan di satu tempat, memberi prioritas, melihat status aktif / expired, dan melacak follow-up dengan nyaman.
 
-Live Demo: https://job-tracker-nine-vivid.vercel.app
+Live Demo: https://job-tracker-nine-virid.vercel.app
 
 ## ✨ Fitur Utama
 
