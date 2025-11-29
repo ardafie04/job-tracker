@@ -49,9 +49,9 @@ Buka http://localhost:5173 di browser.
 1. Buat project Supabase baru.
 2. Aktifkan Auth → Email + Google Provider.
 3. Di Authentication → URL Configuration:
-   - Site URL: `https://job-tracker-nine-vivid.vercel.app` (atau `http://localhost:5173` saat dev)
+   - Site URL: `https://job-tracker-nine-virid.vercel.app` (atau `http://localhost:5173` saat dev)
    - Redirect URLs:
-     - `https://job-tracker-nine-vivid.vercel.app`
+     - `https://job-tracker-nine-virid.vercel.app`
      - `http://localhost:5173`
 4. Copy Project URL & anon key ke `.env` seperti di atas.
 
